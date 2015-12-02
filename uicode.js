@@ -17,8 +17,60 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 debug = false;
 saves = new Hash();
-expressionHistory = new Array();
+expressionHistory = [];
 inlineUserDefinedRelations = false;
+
+/*
+  These two functions getSaves and saveSaves do all the casting play requiered
+  for us to parse what we stored in localStorage.
+  It's pretty much a hack on top of a hack.
+*/
+
+function getSaves() {
+  try {
+    var storaged = window.localStorage.getItem("tables");
+    /*
+      Double parse, because localStorage reads the array as a string and the objects
+      again as a string and for some reason parsing once is not enough...
+    */
+    var savesAsArray = JSON.parse(JSON.parse(storaged));
+    if (Array.isArray(savesAsArray)) {
+      for (var i=0;i<savesAsArray.length;i++) {
+        /*
+          Without this parsing and recreating of the object it
+          will think it's an empty relation and return nothing.
+        */
+        var itemWithOutCast = savesAsArray[i][1];
+        var item = new DataRelation(
+    			itemWithOutCast.name,
+    			itemWithOutCast.columns,
+    			itemWithOutCast.data,
+    			itemWithOutCast.expression
+    		);
+        saves.set(savesAsArray[i][0],item);
+      }
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function saveSaves() {
+  var savesAsArray = [];
+  saves.each(function(kvp) {
+      var key = kvp.key;
+      var table = kvp[1];
+      var tuple = [key, table];
+      savesAsArray.push(tuple);
+  });
+  window.localStorage.setItem("tables", JSON.stringify(savesAsArray));
+}
+
+function removeFromSaves(name) {
+  saves.unset(name);
+  saveSaves();
+  reset();
+}
 
 function reset() {
     blockid = 0;
@@ -28,10 +80,10 @@ function reset() {
 }
 
 function save(name) {
-	if(name == null)
+	if(name === null)
 		return;
 	name = name.trim();
-	if(name.length == 0)
+	if(name.length === 0)
 		return;
     saves.set(name,
 		new DataRelation(
@@ -41,6 +93,7 @@ function save(name) {
 			expression
 		)
     );
+    saveSaves();
     reset();
 }
 
@@ -54,7 +107,7 @@ function leftSide() {
 }
 
 function wrapAroundCheck() {
-    if (currentBlock == null) {
+    if (currentBlock === null) {
         var oldExp = expression;
         expression = addBlock(new Relation());
         currentBlock = expression;
@@ -73,7 +126,7 @@ function wrapAroundCheck() {
 function handleColumn(column) {
     if (currentBlock && currentBlock.kind == Value) {
         addValueColumn(column);
-    } else if (currentBlock == null) {
+    } else if (currentBlock === null) {
         if (expression.kind == Projection) {
             var cols = expression.getColumnsParam().split(",");
             cols = cols.without(column);
@@ -91,7 +144,7 @@ function saveHistory() {
 }
 
 function back() {
-    if (expressionHistory.length == 0) return;
+    if (expressionHistory.length === 0) return;
     expression = expressionHistory.pop();
     expression.resetBlockIds();
     currentBlock = null;
@@ -101,7 +154,7 @@ function back() {
 function addSelection() {
     saveHistory();
     var rel = wrapAroundCheck();
-    if (rel == null) return;
+    if (rel === null) return;
     // not a Relation if this happens
     Object.extend(currentBlock,
     addBlock(new Selection(
@@ -113,7 +166,7 @@ function addSelection() {
 function addProjection(cols) {
     saveHistory();
     var rel = wrapAroundCheck();
-    if (rel == null) return;
+    if (rel === null) return;
     // not a Relation if this happens
     Object.extend(currentBlock,
     addBlock(new Projection(
@@ -125,7 +178,7 @@ function addProjection(cols) {
 function addCrossproduct() {
     saveHistory();
     var rel = wrapAroundCheck();
-    if (rel == null) return;
+    if (rel === null) return;
     // not a Relation if this happens
     Object.extend(currentBlock,
     addBlock(new Crossproduct(
@@ -138,7 +191,7 @@ function addCrossproduct() {
 function addJoin() {
     saveHistory();
     var rel = wrapAroundCheck();
-    if (rel == null) return;
+    if (rel === null) return;
     // not a Relation if this happens
     Object.extend(currentBlock,
     addBlock(new Join(
@@ -150,7 +203,7 @@ function addJoin() {
 function addLeftSemiJoin() {
     saveHistory();
     var rel = wrapAroundCheck();
-    if (rel == null) return;
+    if (rel === null) return;
     // not a Relation if this happens
     Object.extend(currentBlock,
     addBlock(new LeftSemiJoin(
@@ -162,7 +215,7 @@ function addLeftSemiJoin() {
 function addRightSemiJoin() {
     saveHistory();
     var rel = wrapAroundCheck();
-    if (rel == null) return;
+    if (rel === null) return;
     // not a Relation if this happens
     Object.extend(currentBlock,
     addBlock(new RightSemiJoin(
@@ -171,10 +224,34 @@ function addRightSemiJoin() {
     updateDisplay(true);
 }
 
+function addLeftAntiJoin() {
+    saveHistory();
+    var rel = wrapAroundCheck();
+    if (rel === null) return;
+    // not a Relation if this happens
+    Object.extend(currentBlock,
+    addBlock(new LeftAntiJoin(
+    leftSide() ? addBlock(rel, true) : addBlock(new Relation()),
+    leftSide() ? addBlock(new Relation()) : addBlock(rel, true))));
+    updateDisplay(true);
+}
+
+function addRightAntiJoin() {
+    saveHistory();
+    var rel = wrapAroundCheck();
+    if (rel === null) return;
+    // not a Relation if this happens
+    Object.extend(currentBlock,
+    addBlock(new RightAntiJoin(
+    leftSide() ? addBlock(rel, true) : addBlock(new Relation()),
+    leftSide() ? addBlock(new Relation()) : addBlock(rel, true))));
+    updateDisplay(true);
+}
+
 function addOuterJoin() {
     saveHistory();
     var rel = wrapAroundCheck();
-    if (rel == null) return;
+    if (rel === null) return;
     // not a Relation if this happens
     Object.extend(currentBlock,
     addBlock(new OuterJoin(
@@ -186,7 +263,7 @@ function addOuterJoin() {
 function addLeftOuterJoin() {
     saveHistory();
     var rel = wrapAroundCheck();
-    if (rel == null) return;
+    if (rel === null) return;
     // not a Relation if this happens
     Object.extend(currentBlock,
     addBlock(new LeftOuterJoin(
@@ -198,7 +275,7 @@ function addLeftOuterJoin() {
 function addRightOuterJoin() {
     saveHistory();
     var rel = wrapAroundCheck();
-    if (rel == null) return;
+    if (rel === null) return;
     // not a Relation if this happens
     Object.extend(currentBlock,
     addBlock(new RightOuterJoin(
@@ -210,7 +287,7 @@ function addRightOuterJoin() {
 function addMinus() {
     saveHistory();
     var rel = wrapAroundCheck();
-    if (rel == null) return;
+    if (rel === null) return;
     // not a Relation if this happens
     Object.extend(currentBlock,
     addBlock(new Minus(
@@ -234,7 +311,7 @@ function addDivision() {
 function addIntersection() {
     saveHistory();
     var rel = wrapAroundCheck();
-    if (rel == null) return;
+    if (rel === null) return;
     // not a Relation if this happens
     Object.extend(currentBlock,
     addBlock(new Intersection(
@@ -246,7 +323,7 @@ function addIntersection() {
 function addUnion() {
     saveHistory();
     var rel = wrapAroundCheck();
-    if (rel == null) return;
+    if (rel === null) return;
     // not a Relation if this happens
     Object.extend(currentBlock,
     addBlock(new Union(
@@ -258,7 +335,7 @@ function addUnion() {
 function addConditionalJoin() {
     saveHistory();
     var rel = wrapAroundCheck();
-    if (rel == null) return;
+    if (rel === null) return;
     // not a Relation if this happens
     Object.extend(currentBlock,
     addBlock(new ConditionalJoin(
@@ -272,7 +349,7 @@ function addRename(renames) {
     if (!renames) return;
     saveHistory();
     var rel = wrapAroundCheck();
-    if (rel == null) return;
+    if (rel === null) return;
     // not a Relation if this happens
     Object.extend(currentBlock,
     addBlock(new Rename(
@@ -282,7 +359,7 @@ function addRename(renames) {
 }
 
 function addDataRelation(rel) {
-    if (!currentBlock || !(currentBlock.kind == Relation)) return;
+    if (!currentBlock || currentBlock.kind != Relation) return;
     saveHistory();
     Object.extend(currentBlock,
     addBlock(rel));
@@ -290,7 +367,7 @@ function addDataRelation(rel) {
 }
 
 function addValueLiteral(lit) {
-    if (!currentBlock || !(currentBlock.kind == Value) || !lit) return;
+    if (!currentBlock || currentBlock.kind != Value || !lit) return;
     saveHistory();
     Object.extend(currentBlock,
     addBlock(new ValueLiteral(lit)));
@@ -298,7 +375,7 @@ function addValueLiteral(lit) {
 }
 
 function addValueColumn(name) {
-    if (!currentBlock || !(currentBlock.kind == Value) || !name) return;
+    if (!currentBlock || currentBlock.kind != Value || !name) return;
     saveHistory();
 
     Object.extend(currentBlock,
@@ -308,7 +385,7 @@ function addValueColumn(name) {
 }
 
 function addConditionAnd() {
-    if (!currentBlock || !(currentBlock.kind == Condition)) return;
+    if (!currentBlock || currentBlock.kind != Condition) return;
     saveHistory();
     Object.extend(currentBlock,
     addBlock(new ConditionAnd(
@@ -318,7 +395,7 @@ function addConditionAnd() {
 }
 
 function addConditionOr() {
-    if (!currentBlock || !(currentBlock.kind == Condition)) return;
+    if (!currentBlock || currentBlock.kind != Condition) return;
     saveHistory();
     Object.extend(currentBlock,
     addBlock(new ConditionOr(
@@ -328,7 +405,7 @@ function addConditionOr() {
 }
 
 function addConditionNot() {
-    if (!currentBlock || !(currentBlock.kind == Condition)) return;
+    if (!currentBlock || currentBlock.kind != Condition) return;
     saveHistory();
     Object.extend(currentBlock,
     addBlock(new ConditionNot(
@@ -337,7 +414,7 @@ function addConditionNot() {
 }
 
 function addConditionComparison(op) {
-    if (!currentBlock || !(currentBlock.kind == Condition)) return;
+    if (!currentBlock || currentBlock.kind != Condition) return;
     saveHistory();
     Object.extend(currentBlock,
     addBlock(new ConditionComparison(
@@ -356,8 +433,10 @@ function updateDisplay(reset) {
         var key = kvp.key;
         var a = document.createElement('li');
         list.appendChild(a);
-        a.innerHTML = '<a href="javascript:;" onclick="addDataRelation(saves.get(\'' + key + '\'))">'
-        + '$\\large{' + key + '}$ Relation einsetzen  </a>';
+        a.innerHTML = '<a href="javascript:;" onclick="addDataRelation(saves.get(\'' + key + '\'))">' +
+        '$\\large{' + key + '}$ Relation einsetzen  </a>' +
+        '<br><a href="javascript:;" onclick="removeFromSaves(\'' + key + '\')">' +
+        'Relation löschen</a>';
     });
 
     // update expression display
@@ -401,7 +480,7 @@ function updateDisplay(reset) {
         jQuery("#tabs").tabs('select', 0);
     }
 
-    if (currentBlock == null) {
+    if (currentBlock === null) {
         $('side_selector').style.opacity = 1;
     } else {
         $('side_selector').style.opacity = 0.3;
@@ -418,6 +497,7 @@ function updateDisplay(reset) {
 }
 
 function updateResult() {
+
     var result;
     if (debug) {
         result = expression.getResult();
@@ -517,3 +597,5 @@ function toggleInlineUserDefinedRelations(){
 	inlineUserDefinedRelations = !inlineUserDefinedRelations;
 	updateDisplay(reset);
 }
+
+getSaves();

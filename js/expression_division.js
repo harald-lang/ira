@@ -12,8 +12,8 @@ function Division(input1, input2) {
 
     this.validate = function() {
       var leftInputColumns = this.input1.getColumns();
-      var rightInputColumns = this.input2.getColumns()
-      if (leftInputColumns == null || rightInputColumns == null) {
+      var rightInputColumns = this.input2.getColumns();
+      if (leftInputColumns === null || rightInputColumns === null) {
           throw "Es fehlt mindestens eine Eingaberelation.";
       }
 
