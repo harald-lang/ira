@@ -66,9 +66,9 @@ function Projection(columns, input) {
             });
 
             // do not add anything twice!
-            if (!dupeMap.get(newrow.toJSON())) {
+            if (!dupeMap.get(JSON.stringify(newrow,0,4))) {
                 result.push(newrow);
-                dupeMap.set(newrow.toJSON(), true);
+                dupeMap.set(JSON.stringify(newrow,0,4), true);
             }
         });
 

@@ -42,7 +42,7 @@ function Selection(condition, input) {
         rel.each(function(row) {
             var currentRow = new Object();
             cols.each(function(name, nr) {
-                eval("currentRow." + name.gsub(".", "___") + " = " + row[nr].toJSON() + ";");
+                eval("currentRow." + name.gsub(".", "___") + " = " + JSON.stringify(row[nr],0,4) + ";");
                 //eval("currentRow." + (relname + "." + name).gsub(".", "___") + " = " + row[nr].toJSON() + ";");
             });
             if (eval(cond)) {
