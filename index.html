@@ -1,442 +1,411 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
   <head>
+    <meta charset="utf-8">
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
     <meta http-equiv="cache-control" content="no-cache" />
-    <title>
-      IRA - Interaktive Relationale Algebra ;)
-    </title>
+    <title>IRA - Interaktive Relationale Algebra ;)</title>
 
-	  <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-  	tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
-	jax: ["input/TeX","output/HTML-CSS"],
-	TeX: {
-    	extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
-  	},
-	"HTML-CSS": {
-		preferredFont: "STIX",
-		webFont: "STIX-Web",
-		imageFont: "STIX-Web"
-  	}
-	});
-</script>
-	  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-	  <!--<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_SVG"></script>-->
+    <!-- JQuery -->
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/jquery-ui-1.7.2.custom.min.js"></script>
+    <script type="text/javascript" src="lib/jquery.ooCookie.js"></script>
 
+    <!-- Prototype -->
 
-	  <script src="js/block.js" type="text/javascript" charset="utf-8"></script>
-	  <script src="js/relation.js" type="text/javascript" charset="utf-8"></script>
-    <script src="js/data_relation.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/selection.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/expression_projection.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/expression_crossproduct.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/expression_join.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/expression_left_semi_join.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/expression_right_semi_join.js" type="text/javascript" charset="utf-8">
-</script>
-  <script src="js/expression_left_anti_join.js" type="text/javascript" charset="utf-8">
-</script>
-<script src="js/expression_right_anti_join.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/expression_outer_join.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/expression_left_outer_join.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/expression_right_outer_join.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/expression_minus.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/expression_union.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/expression_intersection.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/expression_conditional_join.js" type="text/javascript" charset="utf-8">
-</script>
-  <script src="js/expression_conditional_left_semi_join.js" type="text/javascript" charset="utf-8">
-</script>
-  <script src="js/expression_conditional_right_semi_join.js" type="text/javascript" charset="utf-8">
-</script>
-  <script src="js/expression_conditional_left_anti_join.js" type="text/javascript" charset="utf-8">
-</script>
-  <script src="js/expression_conditional_right_anti_join.js" type="text/javascript" charset="utf-8">
-</script>
-  <script src="js/expression_conditional_left_outer_join.js" type="text/javascript" charset="utf-8">
-</script>
-  <script src="js/expression_conditional_right_outer_join.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/expression_rename.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/condition.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/condition_and.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/condition_or.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/condition_not.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/condition_comparison.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/value.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/value_literal.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/value_column.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="js/expression_division.js" type="text/javascript" charset="utf-8">
-</script>
+    <script charset="utf-8" src="lib/prototype.js" type="text/javascript"></script>
 
-    <script src="lib/jquery-1.3.2.js" type="text/javascript" charset="utf-8">
-</script>
-    <script type="text/javascript" src="lib/jquery-ui-1.7.2.custom.min.js">
-</script>
-    <script type="text/javascript" src="lib/jquery.ooCookie.js">
-</script>
+    <!-- Math Jax Stuff -->
 
-    <script src="lib/prototype.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="lib/mathtex.js" type="text/javascript" charset="utf-8">
-</script>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}, jax: ["input/TeX","output/HTML-CSS"], TeX: { extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"] }, "HTML-CSS": { preferredFont: "STIX", webFont: "STIX-Web", imageFont: "STIX-Web" } });
+    </script>
+    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+    <script charset="utf-8" src="lib/mathtex.js" type="text/javascript"></script>
 
-    <script src="schema.js" type="text/javascript" charset="utf-8">
-</script>
-    <script src="uicode.js" type="text/javascript" charset="utf-8">
-</script>
+    <!-- Relational Logic -->
 
-<link type="text/css" href="css/smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
+    <script charset="utf-8" src="js/block.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/relation.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/data_relation.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/selection.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_projection.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_crossproduct.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_join.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_left_semi_join.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_right_semi_join.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_left_anti_join.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_right_anti_join.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_outer_join.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_left_outer_join.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_right_outer_join.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_minus.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_union.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_intersection.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_conditional_join.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_conditional_left_semi_join.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_conditional_right_semi_join.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_conditional_left_anti_join.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_conditional_right_anti_join.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_conditional_left_outer_join.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_conditional_right_outer_join.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_rename.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/condition.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/condition_and.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/condition_or.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/condition_not.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/condition_comparison.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/value.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/value_literal.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/value_column.js" type="text/javascript"></script>
+    <script charset="utf-8" src="js/expression_division.js" type="text/javascript"></script>
+
+    <!-- Data -->
+
+    <script charset="utf-8" src="schema.js" type="text/javascript"></script>
+
+    <!-- UI Logic -->
+
+    <script charset="utf-8" src="uicode.js" type="text/javascript"></script>
+
+    <!-- UI Style -->
+
+    <!-- <link href="css/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="css/bootstrap/css/flat.min.css" rel="stylesheet">
+    <script src="css/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 
     <style type="text/css">
-/*<![CDATA[*/
-    a { color: black; }
-    body{ font: 62.5% "Trebuchet MS", sans-serif; margin: 10px;}
-    li { padding-top: 3px;}
-    /*]]>*/
+      /*TODO: Perhaps move this to our css file:*/
+      a {
+        color: black;
+      }
+      body {
+        font: "Trebuchet MS", sans-serif;
+        margin: 20px;
+      }
+      li {
+        padding-top: 10px;
+      }
     </style>
+
   </head>
   <body>
 
-    <!--<h2> Editierbereich
-      <span style="color: darkgreen; font-size:80%">
-      (<a target="_NEW" href="movie1.mov" style="color: darkgreen; ">Lehrvideo (Quicktime, VLC), am besten Rechtklick, speichern.</a>)
-      </span>
-      </h2>-->
-    <div id="display_expression" style="font-size: 16pt; font-family: courier;text-align:center; margin-top:30px"></div><!--<h2>
-      Toolbox (&auml;ndert rot markiertes Element) &nbsp;&nbsp; <a href="javascript:;" onclick="reset()" style="font-size: 12pt;">(alles zur&uuml;cksetzen bis auf Zwischenergebnisse)</a>
-    </h2>-->
-    <script type="text/javascript">
-//<![CDATA[
-      jQuery(document).ready(function(){
-        jQuery("#tabs").tabs();
-        jQuery("#tabs").tabs('select', 0);
-      });
-    //]]>
-    </script>
+    <!-- Display On Top -->
+
+    <h2><div id="display_expression" style="font-family: courier;text-align:center; margin-top:30px"></div></h2>
+
+    <!-- Tabs -->
 
     <div>
-
-    <div id="tabs" style="min-height:250px; margin-top:30px;">
-      <ul>
-        <li>
-          <a href="#tab1"><span>für Ausdrücke</span></a>
+      <ul class="nav nav-tabs" id="myTab">
+        <li class="active">
+          <a id="tab1b" data-target="#tab1" data-toggle="tab">Ausdrücke</a>
         </li>
         <li>
-          <a href="#tab2"><span>für Bedingungen</span></a>
+          <a id="tab2b" data-target="#tab2" data-toggle="tab">Bedingungen</a>
         </li>
         <li>
-          <a href="#tab3"><span>für Werte</span></a>
+          <a id="tab3b" data-target="#tab3" data-toggle="tab">Werte</a>
         </li>
       </ul>
-
-      <div id="tab1" class="toolbox toolbox_expressions">
-        <ul style="float:left;">
-          <li>
-            <a href="javascript:;" onclick="addSelection()">$\large{\sigma}$ - Selektion einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addProjection(window.prompt('Spalten? (Spalten mit Komma getrennt angeben, Beispiel PersNr,Name,Raum)'))">$\large{\Pi}$ - Projektion einsetzen</a>
-          </li>
-          <li>
-            <script type="text/javascript">
-//<![CDATA[
-                var renameHelp = "Um die gesamte Relation umzubenennen, hier den neuen Namen eintragen.\n\n";
-                renameHelp += "Um einzelne Spalten umzubenennen folgende Notation: NeueSpalte1<-AlteSpalte1,NeueSpalte2<-AlteSpalte\n";
-                renameHelp += "Beispiel: ProfName<-Name,Hierarchieebene<-Rang\n";
-                renameHelp += "ACHTUNG: Groß- und Kleinschreibung ist wichtig!!\n";
-                renameHelp += "Umbenennungen mit Punkte sind nicht erlaubt.";
-
-            //]]>
-            </script> <a href="javascript:;" onclick="addRename(promptForRename(renameHelp))">$\large{\rho}$ - Umbenennung einsetzen</a>
-          </li>
-          <li style="margin-top:15px;">
-            <a href="javascript:;" onclick="addMinus()">$\large{\setminus}$ - Minus einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addDivision()">$\large{\div}$ - Division einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addUnion()">$\large{\cup}$ - Vereinigung einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addIntersection()">$\large{\cap}$ - Schnittmenge einsetzen</a>
-          </li>
-        </ul>
-        <ul style="float:left;">
-          <li>
-            <a href="javascript:;" onclick="addCrossproduct()">$\large{\times}$ - Kreuzprodukt einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addJoin()">$\large{\bowtie}$ - Natürlicher Join einsetzen</a>
-          </li>
-          <!--<li>
-            <a href="javascript:;" onclick="addOuterJoin()"><img src="null" border="0" alt="mathtex:{\mathrel{\stackrel{\rule[0.52ex]{0.50ex}{0.10ex}}{\rule[0ex]{0.50ex}{0.10ex}}\hspace{-0.75ex}\mathord{\bowtie}\hspace{-0.1ex}{\mathrel{\stackrel{\rule[0.52ex]{0.50ex}{0.10ex}}{\rule[0ex]{0.50ex}{0.10ex}}\hspace{-0.7ex}}" /> - Outer Join einsetzen</a>
-          </li>-->
-          <li>
-            <a href="javascript:;" onclick="addLeftOuterJoin()">$\large{\unicode{x27d5}}$ - Left Outer Join einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addRightOuterJoin()">$\large{\unicode{x27d6}}$ - Right Outer Join einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addLeftSemiJoin()">$\large{\ltimes}$ - Left Semi Join einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addRightSemiJoin()">$\large{\rtimes}$ - Right Semi Join einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addLeftAntiJoin()">$\large{\rhd}$ - Left Anti Join einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addRightAntiJoin()">$\large{\lhd}$ - Right Anti Join einsetzen</a>
-          </li>
-        </ul>
-        <ul style="float:left;">
-          <li style="margin-top:15px;">
-            <a href="javascript:;" onclick="addConditionalJoin()">$\large{\bowtie_\Theta}$ - Allgemeiner Join einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addConditionalLeftOuterJoin()">$\large{\unicode{x27d5}_\Theta}$ - Allgemeiner Left Outer Join einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addConditionalRightOuterJoin()">$\large{\unicode{x27d6}_\Theta}$ - Allgemeiner Right Outer Join einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addConditionalLeftSemiJoin()">$\large{\ltimes_\Theta}$ - Allgemeiner Left Semi Join einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addConditionalRightSemiJoin()">$\large{\rtimes_\Theta}$ - Allgemeiner Right Semi Join einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addConditionalLeftAntiJoin()">$\large{\rhd_\Theta}$ - Allgemeiner Left Anti Join einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addConditionalRightAntiJoin()">$\large{\lhd_\Theta}$ - Allgemeiner Right Anti Join einsetzen</a>
-          </li>
-        </ul>
-        <ul style="float:left;">
-          <li>
-            <a href="javascript:;" onclick="addDataRelation(professoren)">$\large{Professoren}$ Relation einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addDataRelation(vorlesungen)">$\large{Vorlesungen}$ Relation einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addDataRelation(assistenten)">$\large{Assistenten}$ Relation einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addDataRelation(studenten)">$\large{Studenten}$ Relation einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addDataRelation(hoeren)">$\large{hoeren}$ Relation einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addDataRelation(voraussetzen)">$\large{voraussetzen}$ Relation einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addDataRelation(pruefen)">$\large{pruefen}$ Relation einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addDataRelation(zehnkampf)">$\large{Zehnkampf}$ Relation einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addDataRelation(zehnkampfd)">$\large{ZehnkampfD}$ Relation einsetzen</a>
-          </li>
-        </ul>
-        <ul style="float:left" id="savelist">
-          <li style="display:none">&nbsp;</li>
-        </ul>
-        <div id="side_selector" style="clear:both;">
-          <input type="radio" name="side" id="side" checked="checked" /> alter Ausdruck links <input type="radio" name="side" /> alter Ausdruck rechts
+      <div class="well">
+        <div class="tab-content">
+          <div class="tab-pane active" id="tab1">
+            <ul style="float:left;">
+              <li>
+                <a href="javascript:;" onclick="addSelection()">$\large{\sigma}$ - Selektion einsetzen</a>
+              </li>
+              <li>
+                <a href="#result" onclick="updateResult(true)">$\large{\Pi}$ - Projektion einsetzen</a>
+              </li>
+              <li>
+                <script type="text/javascript">
+                  var renameHelp = "Um die gesamte Relation umzubenennen, hier den neuen Namen eintragen.\n\n";
+                  renameHelp += "Um einzelne Spalten umzubenennen folgende Notation: NeueSpalte1<-AlteSpalte1,NeueSpalte2<-AlteSpalte\n";
+                  renameHelp += "Beispiel: ProfName<-Name,Hierarchieebene<-Rang\n";
+                  renameHelp += "ACHTUNG: Groß- und Kleinschreibung ist wichtig!!";
+                </script>
+                <a href="#result" onclick="updateResult(false,true)">$\large{\rho}$ - Umbenennung einsetzen</a>
+              </li>
+              <li style="margin-top:15px;">
+                <a href="javascript:;" onclick="addMinus()">$\large{\setminus}$ - Minus einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addDivision()">$\large{\div}$ - Division einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addUnion()">$\large{\cup}$ - Vereinigung einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addIntersection()">$\large{\cap}$ - Schnittmenge einsetzen</a>
+              </li>
+            </ul>
+            <ul style="float:left;">
+              <li>
+                <a href="javascript:;" onclick="addCrossproduct()">$\large{\times}$ - Kreuzprodukt einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addJoin()">$\large{\bowtie}$ - Natürlicher Join einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addLeftOuterJoin()">$\large{\unicode{x27d5}}$ - Left Outer Join einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addRightOuterJoin()">$\large{\unicode{x27d6}}$ - Right Outer Join einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addLeftSemiJoin()">$\large{\ltimes}$ - Left Semi Join einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addRightSemiJoin()">$\large{\rtimes}$ - Right Semi Join einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addLeftAntiJoin()">$\large{\rhd}$ - Left Anti Join einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addRightAntiJoin()">$\large{\lhd}$ - Right Anti Join einsetzen</a>
+              </li>
+            </ul>
+            <ul style="float:left;">
+              <li style="margin-top:15px;">
+                <a href="javascript:;" onclick="addConditionalJoin()">$\large{\bowtie_\Theta}$ - Allgemeiner Join einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addConditionalLeftOuterJoin()">$\large{\unicode{x27d5}_\Theta}$ - Allgemeiner Left Outer Join einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addConditionalRightOuterJoin()">$\large{\unicode{x27d6}_\Theta}$ - Allgemeiner Right Outer Join einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addConditionalLeftSemiJoin()">$\large{\ltimes_\Theta}$ - Allgemeiner Left Semi Join einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addConditionalRightSemiJoin()">$\large{\rtimes_\Theta}$ - Allgemeiner Right Semi Join einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addConditionalLeftAntiJoin()">$\large{\rhd_\Theta}$ - Allgemeiner Left Anti Join einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addConditionalRightAntiJoin()">$\large{\lhd_\Theta}$ - Allgemeiner Right Anti Join einsetzen</a>
+              </li>
+            </ul>
+            <ul style="float:left;">
+              <li>
+                <a href="javascript:;" onclick="addDataRelation(professoren)">$\large{Professoren}$ Relation einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addDataRelation(vorlesungen)">$\large{Vorlesungen}$ Relation einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addDataRelation(assistenten)">$\large{Assistenten}$ Relation einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addDataRelation(studenten)">$\large{Studenten}$ Relation einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addDataRelation(hoeren)">$\large{hoeren}$ Relation einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addDataRelation(voraussetzen)">$\large{voraussetzen}$ Relation einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addDataRelation(pruefen)">$\large{pruefen}$ Relation einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addDataRelation(zehnkampf)">$\large{Zehnkampf}$ Relation einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addDataRelation(zehnkampfd)">$\large{ZehnkampfD}$ Relation einsetzen</a>
+              </li>
+            </ul>
+            <ul id="savelist" style="float:left">
+              <li style="display:none">&nbsp;</li>
+            </ul>
+            <div id="side_selector" style="clear:both;">
+              <input checked="checked" id="side" name="side" type="radio"/>
+              alter Ausdruck links
+              <input name="side" type="radio"/>
+              alter Ausdruck rechts
+            </div>
+          </div>
+          <div class="tab-pane" id="tab2">
+            <ul style="float:left">
+              <li>
+                <a href="javascript:;" onclick="addConditionAnd()">$\large{Bedingung \wedge Bedingung}$ einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addConditionOr()">$\large{Bedingung \vee Bedingung}$ einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addConditionNot()">$\large{\neg Bedingung}$ einsetzen</a>
+              </li>
+            </ul>
+            <ul style="float:left">
+              <li>
+                <a href="javascript:;" onclick="addConditionComparison('=')">$\large{Wert = Wert}$ einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addConditionComparison('!=')">$\large{Wert \neq Wert}$ einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addConditionComparison('&lt;')">$\large{Wert &lt; Wert}$ einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addConditionComparison('&gt;')">$\large{Wert &gt; Wert}$ einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addConditionComparison('&lt;=')">$\large{Wert \leq Wert}$ einsetzen</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addConditionComparison('&gt;=')">$\large{Wert \geq Wert}$ einsetzen</a>
+              </li>
+            </ul>
+          </div>
+          <div class="tab-pane" id="tab3">
+            <ul>
+              <li>
+                <a href="javascript:;" onclick="addValueLiteral(window.prompt('Wert? ACHTUNG: Groß- und Kleinschreibung ist wichtig!!'))">Wert eingeben</a>
+              </li>
+              <li>
+                <a href="javascript:;" onclick="addValueColumn(window.prompt('Spalte? ACHTUNG: Groß- und Kleinschreibung ist wichtig!!'))">Spalte eingeben</a>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div><!-- tab 1 zu -->
-      <div id="tab2" class="toolbox toolbox_conditions">
-        <ul style="float:left">
-          <li>
-            <a href="javascript:;" onclick="addConditionAnd()">$\large{Bedingung \wedge Bedingung}$ einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addConditionOr()">$\large{Bedingung \vee Bedingung}$ einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addConditionNot()">$\large{\neg Bedingung}$ einsetzen</a>
-          </li>
-        </ul>
-        <ul style="float:left">
-          <li>
-            <a href="javascript:;" onclick="addConditionComparison('=')">$\large{Wert = Wert}$ einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addConditionComparison('!=')">$\large{Wert \neq Wert}$ einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addConditionComparison('&lt;')">$\large{Wert &lt; Wert}$ einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addConditionComparison('&gt;')">$\large{Wert &gt; Wert}$ einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addConditionComparison('&lt;=')">$\large{Wert \leq Wert}$ einsetzen</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addConditionComparison('&gt;=')">$\large{Wert \geq Wert}$ einsetzen</a>
-          </li>
-        </ul>
-      </div><!-- tab 2 zu -->
-      <div id="tab3" class="toolbox toolbox_values">
-        <ul>
-          <li>
-            <a href="javascript:;" onclick="addValueLiteral(window.prompt('Wert? ACHTUNG: Groß- und Kleinschreibung ist wichtig!!'))">Wert eingeben</a>
-          </li>
-          <li>
-            <a href="javascript:;" onclick="addValueColumn(window.prompt('Spalte? ACHTUNG: Groß- und Kleinschreibung ist wichtig!!'))">Spalte eingeben</a>
-          </li>
-        </ul>
-      </div><!-- Tab 3 zu -->
-      <div style="clear: both;"></div>
-    </div><!-- Tabs zu -->
-
-    <br />
-
-    <div class="ui-widget-content ui-corner-all ui-widget ui-tabs" style="min-height: 65px">
-      <div class="ui-widget-header ui-corner-all">
-        Ausdruck in $\large{\LaTeX}$:
-        <a href="javascript:;" onclick="toggleInlineUserDefinedRelations()">(inline)</a>
-        <a href="javascript:;" onclick="reset()">(reset)</a>
-        <a href="javascript:;" onclick="back()">(undo)</a>
-        <a href="javascript:;" onclick="redo()">(redo)</a>
-      </div>
-      <div class="ui-tabs-panel ui-widget-content" id="display_expression_latex"></div>
-    </div>
-
-    <br />
-
-    <div class="ui-widget-content ui-corner-all ui-widget ui-tabs">
-      <div class="ui-widget-header ui-corner-all">
-        Ergebnis <a href="javascript:;" onclick="save(prompt('Name?'))" style="font-size: 11px;">(speichern)</a>
-      </div>
-      <div class="ui-tabs-panel">
-      <div id="error" style="color: red;"></div>
-      <div id="result"></div>Achtung, klicken auf Spalten / Elemente fügt Wertobjekte in den Ausdruck ein.
       </div>
     </div>
+    <div class="alert alert-info">
+      <h5><b>Ausdruck in $\large{\LaTeX}$:</b>
+      <br><br>
+      <div id="display_expression_latex"></div></h5>
+      <br>
     </div>
+    <div>
+      <!-- <div>
+        Ergebnis
+        <a href="javascript:;" onclick="save(prompt('Name?'))" style="font-size: 11px;">(speichern)</a>
+      </div> -->
+      <div>
+        <div id="resultName"></div>
+        <div class="btn-toolbar">
+          <div class="btn-group">
+            <button onclick="toggleInlineUserDefinedRelations()" class="btn btn-info" type="button">Inline</button>
+            <button onclick="reset()" class="btn btn-info" type="button">Reset</button>
+            <button onclick="back()" class="btn btn-info" type="button">Undo</button>
+            <button onclick="redo()" class="btn btn-info" type="button">Redo</button>
+          </div>
+          <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">
+            Save
+          </button>
+          <div id="demo" class="collapse">
+            <br>
+            <form name="save">
+              <input name="udrname" class="input-medium search-query" type="text" placeholder="Name">
+              <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo" onclick="saveUDR()">
+                Save
+              </button>
+            </form>
+          </div>
+        </div>
+        <div id="error" style="color: red;"></div>
+        <div id="result"></div>
+        Achtung, klicken auf Spalten / Elemente fügt Wertobjekte in den Ausdruck ein.
+      </div>
+    </div>
+  </div>
 
+  <script type="text/javascript">
+    //<![CDATA[
+    //<![CDATA[
+    var newsid = 3;
+    var newscount = 3;
+    var c = new jQuery.cookie();
+    c.get();
 
-    <script type="text/javascript">
-//<![CDATA[
-var newsid = 3;
-var newscount = 3;
-var c = new jQuery.cookie();
-c.get();
-
-var showNews = false;
-if (c.lastNews != newsid || c.count != 0) {
-    if (c.lastNews != newsid) {
+    var showNews = false;
+    if (c.lastNews != newsid || c.count != 0) {
+      if (c.lastNews != newsid) {
         c.lastNews = newsid;
         c.count = newscount - 1;
-    } else {
+      } else {
         c.count = c.count - 1;
+      }
+      showNews = true;
     }
-    showNews = true;
-}
-//]]>
-    </script>
+    //]]>    //]]>
+  </script>
 
-    <div id="hilfe">
-      <h2> Neuerung 17.11.2009, 20:28: Zurück Knopf </h2>
+  <div id="hilfe">
+    <h2>
+      Neuerung 17.11.2009, 20:28: Zurück Knopf
+    </h2>
 
-      Der viel geforderte und zugegebenermaßen sehr wichtige Back Button ist jetzt da. Falls jemand wissen will, wieso dieser so sau schwer zu erzeugen ist, melde er sich schriftlich oder in einer Übung bei mir ;-)
+    Der viel geforderte und zugegebenermaßen sehr wichtige Back Button ist jetzt da. Falls jemand wissen will, wieso dieser so sau schwer zu erzeugen ist, melde er sich schriftlich oder in einer Übung bei mir ;-)
 
-      <h2> Neuerung 17.11.2009, 20:01: Diverses </h2>
+    <h2>
+      Neuerung 17.11.2009, 20:01: Diverses
+    </h2>
 
-      In Input Dialogen abbrechen geht jetzt. LaTeX Ausdrücke mit einem Unterstrich in einer Bedingung gehen jetzt. Siehe auch die Bugs Seite. Danke an alle "Helfer".
+    In Input Dialogen abbrechen geht jetzt. LaTeX Ausdrücke mit einem Unterstrich in einer Bedingung gehen jetzt. Siehe auch die Bugs Seite. Danke an alle "Helfer".
 
-      <h2> Lehrvideo </h2>
-      Du kannst mit Quicktime / VLC <a href="movie1.mov" target="NEW">hier</a> ein kurzes Video zur Bedienung ansehen!
+    <h2>
+      Lehrvideo
+    </h2>
+    Du kannst mit Quicktime / VLC
+    <a href="movie1.mov" target="NEW">hier</a>
+    ein kurzes Video zur Bedienung ansehen!
 
-      <br /><hr />
-      Du siehst diesen Dialog noch
-      <script type="text/javascript">
-        document.write(c.count);
-      </script>
-      mal.
-    </div>
-
+    <br/><hr/>
+    Du siehst diesen Dialog noch
     <script type="text/javascript">
-//<![CDATA[
-if (false && showNews) {
-    jQuery("#hilfe").dialog({
-        modal: true,
-        show: 'slide',
-        title: 'Hinweis',
-        resizable: false
-    });
-} else {
-    jQuery("#hilfe").hide();
-}
-c.set();
-
-reset();
-updateDisplay(true);
-//]]>
+      document.write(c.count);
     </script>
+    mal.
+  </div>
 
-    <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  <script type="text/javascript">
+    //<![CDATA[
+    //<![CDATA[
+    if (false && showNews) {jQuery("#hilfe").dialog({modal: true, show: 'slide', title: 'Hinweis', resizable: false});} else {jQuery("#hilfe").hide();}
+    c.set();
 
-  ga('create', 'UA-45539735-2', 'auto');
-  ga('send', 'pageview');
+    reset();
+    updateDisplay(true);
+    //]]>    //]]>
+  </script>
 
-</script>
+  <script>
+    (function(i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function() {
+        (i[r].q = i[r].q || []).push(arguments)
+      },
+      i[r].l = 1 * new Date();
+      a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
+    ga('create', 'UA-45539735-2', 'auto');
+    ga('send', 'pageview');
+  </script>
 
-
-    <hr />
+  <hr/>
+  <p>
+    <a href="mailto:db@muehe.org">Henrik Mühe</a>
+    <a href="http://www-db.in.tum.de/~muehe/">homepage</a>, 2009-2012 - Bitte Bugs via
+    <a href="https://github.com/harald-lang/ira/issues">GitHub</a>
+    melden! -
+    <a href="bugs.html">Bekannte Bugs</a>
     <p>
-      <a href="mailto:db@muehe.org">Henrik Mühe</a>
-      <a href="http://www-db.in.tum.de/~muehe/">homepage</a>, 2009-2012
-
-      - Bitte Bugs via <a href="https://github.com/harald-lang/ira/issues">GitHub</a> melden!
-      - <a href="bugs.html">Bekannte Bugs</a>
-	<p>
-		<a href="http://www.mathjax.org">
-			<img title="Powered by MathJax"
-			src="http://cdn.mathjax.org/mathjax/badge/badge.gif"
-			border="0" alt="Powered by MathJax" />
-		</a>
-	</p>
-
-
+      <a href="http://www.mathjax.org">
+        <img alt="Powered by MathJax" border="0" src="http://cdn.mathjax.org/mathjax/badge/badge.gif" title="Powered by MathJax"/>
+      </a>
+    </p>
 
   </body>
 </html>

@@ -31,7 +31,7 @@ function getRelationsFromStorage() {
       Double parse, because localStorage reads the array as a string and the objects
       again as a string and for some reason parsing once is not enough...
     */
-    var savesAsArray = JSON.parse(JSON.parse(objectFromStorage));
+    var savesAsArray = JSON.parse(objectFromStorage);
     if (Array.isArray(savesAsArray)) {
       for (var i=0;i<savesAsArray.length;i++) {
         /*
@@ -91,7 +91,9 @@ function reset() {
     updateDisplay();
 }
 
-function save(name) {
+function saveUDR() {
+  var name = document.forms.save.udrname.value;
+  console.log(name);
 	if(name === null)
 		return;
 	name = name.trim();
@@ -188,6 +190,28 @@ function addSelection() {
     updateDisplay(true);
 }
 
+function projectFromInput() {
+  var h = "";
+  var count = 0;
+  expression.getColumns().each(function(c) {
+      var input = $('inlineCheckbox' + c);
+      if (input !== null) {
+        var value = input.checked;
+        if (value) {
+          h += c + ",";
+          count++;
+        }
+      }
+  });
+  if (count > 0 && count !== expression.getColumns().length) {
+    h = h.substring(0,h.length-1);
+    addProjection(h);
+  }
+  if (count === expression.getColumns().length) {
+    updateDisplay(true);
+  }
+}
+
 function addProjection(cols) {
     saveHistory();
     var rel = wrapAroundCheck();
@@ -197,7 +221,7 @@ function addProjection(cols) {
     addBlock(new Projection(
     cols,
     addBlock(rel, true))));
-    updateDisplay(true);
+    updateResult(true);
 }
 
 function addCrossproduct() {
@@ -480,6 +504,44 @@ function promptForRename(help) {
   return res;
 }
 
+function renameFromInput() {
+  var h = "";
+  var count = 0;
+  expression.getColumns().each(function(c) {
+      var input = $('newName' + c);
+      if (input !== null) {
+        var value = input.value;
+        if (value) {
+          h += value + "<-" + c + ",";
+          count++;
+        }
+      }
+  });
+  var input = $('newNameForRelation');
+  var value;
+  if (input !== null) {
+    value = input.value;
+  }
+  if (count > 0) {
+    h = h.substring(0,h.length-1);
+    if (isValidRename(h)) {
+      addRename(h);
+    } else {
+      $("error").innerHTML = "Problem: Namen mit Punkte sind nicht Erlaubt.<br/>";
+    }
+  } else {
+    updateDisplay();
+  }
+  if (value) {
+    if (isValidRename(value))
+      addRename(value);
+    else
+      $("error").innerHTML = "Problem: Namen mit Punkte sind nicht Erlaubt.<br/>";
+  } else if ($("error").innerHTML === "") {
+    updateDisplay();
+  }
+}
+
 function addRename(renames) {
     if (!renames || renames === "") return;
     saveHistory();
@@ -595,7 +657,7 @@ function updateDisplay(reset) {
         $$(".toolbox_values").each(function(c) {
             c.style.opacity = 1;
         });
-        jQuery("#tabs").tabs('select', 2);
+        $('tab3b').click();
     } else if (currentBlock && currentBlock.kind == Condition) {
         $$(".toolbox").each(function(c) {
             c.style.opacity = 0.3;
@@ -603,7 +665,7 @@ function updateDisplay(reset) {
         $$(".toolbox_conditions").each(function(c) {
             c.style.opacity = 1;
         });
-        jQuery("#tabs").tabs('select', 1);
+        $('tab2b').click();
     } else {
         // if (currentBlock instanceof Relation) {
         $$(".toolbox").each(function(c) {
@@ -612,7 +674,7 @@ function updateDisplay(reset) {
         $$(".toolbox_expressions").each(function(c) {
             c.style.opacity = 1;
         });
-        jQuery("#tabs").tabs('select', 0);
+        $('tab1b').click();
     }
 
     if (currentBlock === null) {
@@ -631,7 +693,7 @@ function updateDisplay(reset) {
 	MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 }
 
-function updateResult() {
+function updateResult(projecting, renaming) {
 
     var result;
     if (debug) {
@@ -647,13 +709,24 @@ function updateResult() {
     }
     var h = '';
 
-    h += '<h4>Relation: ' + expression.getName() + '</h4>';
-    h += '<table class="ui-widget">';
-    h += '<thead class="ui-widget-header"><tr>';
+    if (projecting) {
+      h += '<button onclick="projectFromInput()" class="btn btn-info" type="button">Projection Fertig!</button><br><br>';
+    } else if (renaming) {
+      h += '<h5>Schreiben Sie die neue Namen der Spalten die Sie umbenennen wollen.</h5><br><input type="text" class="input-medium search-query" id="newNameForRelation"><button onclick="renameFromInput()" class="btn btn-info" type="button">Umbenennung Fertig!</button><br><br>';
+    }
+
+    h += '<table class="table table-bordered table-hover table-striped">';
+    h += '<thead><tr>';
 
     // header
     expression.getColumns().each(function(c) {
-        h += '<th><a href="javascript:;" onclick="handleColumn(\'' + c + '\')">' + c + '</a></th>';
+        if (projecting) {
+          h += '<th><input type="checkbox" id="inlineCheckbox' + c + '"><a>  ' + c + '</a></th>';
+        } else if (renaming) {
+          h += '<th><input type="text" class="form-control" id="newName' + c + '"><a>  ' + c + '</a></th>';
+        } else {
+          h += '<th><a href="javascript:;" onclick="handleColumn(\'' + c + '\')">' + c + '</a></th>';
+        }
     });
 
     h += '</tr></thead><tbody class="ui-widget-content">';
@@ -668,7 +741,12 @@ function updateResult() {
 
     h += '</tbody></table>';
 
-    var display = $("result");
+    var display = $("resultName");
+    display.innerHTML = "";
+    var t = document.createElement('div');
+    display.appendChild(t);
+    t.innerHTML = '<h4>Relation: ' + expression.getName() + '</h4>';
+    display = $("result");
     display.innerHTML = "";
     var a = document.createElement('div');
     display.appendChild(a);
@@ -743,3 +821,5 @@ function KeyPress(e) {
       if (evtobj.keyCode == 90 && evtobj.ctrlKey && evtobj.shiftKey) redo();
 }
 document.onkeydown = KeyPress;
+
+currentBlock = new Block();
