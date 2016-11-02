@@ -28,7 +28,7 @@ function ConditionalRightAntiJoin(condition,input1, input2) {
     this.setName = null;
 
     this.getColumns = function() {
-        if (this.condition.isEmpty()) return (new ConditionalJoin(this.condition, this.input1, this.input2)).getColumns();
+        if (this.condition.isEmpty()) return (new ConditionalJoin(this.condition, this.input1, this.input2)).getColumns(true);
         return this.input2.getColumns();
     };
     this.setColumns = null;
