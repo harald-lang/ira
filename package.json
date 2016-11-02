@@ -1,0 +1,36 @@
+{
+  "name": "ira",
+  "version": "1.0.0",
+  "description": "Interaktive Relationale Algebra Tool",
+  "dependencies": {},
+  "devDependencies": {
+    "jest-cli": "^0.8.2"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mathiasquintero/ira.git"
+  },
+  "keywords": [
+    "Relationale",
+    "Algebra",
+    "DB"
+  ],
+  "jest": {
+    "testFileExtensions": [
+      "js"
+    ],
+    "unmockedModulePathPatterns": [
+      "<rootDir>/js",
+      "<rootDir>/test-env"
+    ]
+  },
+  "author": "db.in.tum.de",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mathiasquintero/ira/issues"
+  },
+  "homepage": "https://github.com/mathiasquintero/ira#readme"
+}

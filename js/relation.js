@@ -1,4 +1,4 @@
-/* 
+/*
 IRA - Interactive Relational Algebra Tool
 Copyright (C) 2010-2012 Henrik Mühe
 
@@ -15,38 +15,46 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 function Relation() {
     this.kind = Relation;
 
     // returns contents of this relation object
     this.getResult = function() {
         return [];
-    }
+    };
 
     this.getName = function() {
         return "";
-    }
+    };
     this.setName = null;
 
     this.getColumns = function() {
         return [];
-    }
+    };
     this.setColumns = null;
 
     this.copy = function() {
         return new Relation();
-    }
+    };
 
     this.toJS = function() {
         throw "Der Ausdruck ist nicht vollständig definiert, es fehlt eine Relation.";
-    }
+    };
 
     this.toHTML = function(options) {
         return '<a id="block_' + this.blockId + '" class="block" href="javascript:;" onclick="editExpression(getBlock(' + this.blockId + '));">Ausdruck</a>';
-    }
+    };
 
     this.toLatex = function(options) {
         return "\\emptyset";
-    }
+    };
 }
-Relation.prototype = new Block;
+
+try {
+  var Block = require('../js/block.js');
+  Relation.prototype = new Block();
+  module.exports = Relation;
+} catch(e) {
+  Relation.prototype = new Block();
+}

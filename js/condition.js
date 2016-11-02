@@ -47,4 +47,10 @@ function Condition() {
     };
 
 }
-Condition.prototype = new Block();
+try {
+  var Block = require('../js/block.js');
+  Condition.prototype = new Block();
+  module.exports = Condition;
+} catch(e) {
+  Condition.prototype = new Block();
+}

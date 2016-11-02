@@ -21,19 +21,25 @@ function ValueColumn(col) {
 
     this.copy = function() {
         return new ValueColumn(col);
-    }
+    };
 
     this.toJS = function() {
         return "currentRow." + this.column.gsub(".", "___");
-        // currentRow needs to be filled before this is eval'd
-    }
+    };
 
     this.toHTML = function(options) {
         return this.column;
-    }
+    };
 
     this.toLatex = function(options) {
         return '\\textrm{' + this.column.gsub("_", "\\_") + '}';
-    }
+    };
 }
-ValueColumn.prototype = new Value;
+
+try {
+  var Value = require('./value.js');
+  ValueColumn.prototype = new Value();
+  module.exports = ValueColumn;
+} catch (e) {
+  ValueColumn.prototype = new Value();
+}

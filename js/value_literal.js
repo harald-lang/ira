@@ -20,18 +20,25 @@ function ValueLiteral(lit) {
 
     this.copy = function() {
         return new ValueLiteral(lit);
-    }
+    };
 
     this.toJS = function() {
         return "\"" + this.literal + "\"";
-    }
+    };
 
     this.toHTML = function(options) {
         return "'" + this.literal + "'";
-    }
+    };
 
     this.toLatex = function(options) {
         return "'\\textrm{" + this.literal + "}'";
-    }
+    };
 }
-ValueLiteral.prototype = new Value;
+
+try {
+  var Value = require('./value.js');
+  ValueLiteral.prototype = new Value();
+  module.exports = ValueLiteral;
+} catch (e) {
+  ValueLiteral.prototype = new Value();
+}

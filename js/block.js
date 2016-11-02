@@ -55,3 +55,7 @@ function Block() {
         }
     };
 }
+
+try {
+  module.exports = Block;
+} catch(e) { }

@@ -2,7 +2,7 @@
 IRA - Interactive Relational Algebra Tool
 Copyright (C) 2010-2012 Henrik Mühe
 
-This program is free software: you can redistribute it and/or modify
+This program is free software: you can redistribute it Or/or modify
 it under the terms of the GNU Affero General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
@@ -40,4 +40,10 @@ function ConditionOr(cond1, cond2) {
         return '(' + this.cond1.toLatex(options) + '\\vee ' + this.cond2.toLatex(options) + ')';
     }
 }
-ConditionOr.prototype = new Condition;
+try {
+  var Condition = require('./condition.js');
+  ConditionOr.prototype = new Condition();
+  module.exports = ConditionOr;
+} catch (e) {
+  ConditionOr.prototype = new Condition();
+}

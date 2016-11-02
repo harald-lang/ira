@@ -1,3 +1,12 @@
+try {
+  var Projection = require('./expression_projection.js');
+  var Rename = require('./expression_rename.js');
+  var Crossproduct = require('./expression_crossproduct.js');
+  var Minus = require('./expression_minus.js');
+} catch (e) {
+  console.error(e);
+}
+
 function Division(input1, input2) {
     this.input1 = input1;
     this.input2 = input2;
@@ -11,7 +20,7 @@ function Division(input1, input2) {
     this.setName = null;
 
     this.validate = function() {
-      var leftInputColumns = this.input1.getColumns().clone().map(function(x) {
+      var leftInputColumns = this.input1.getColumns().map(function(x) {
         var data = x.split(".");
         return data[data.length-1];
       });
@@ -38,8 +47,8 @@ function Division(input1, input2) {
     this.getColumns = function() {
         this.validate();
         var result = [];
-        var columns = this.input1.getColumns().clone();
-        var dividerColumns = this.input2.getColumns().clone();
+        var columns = this.input1.getColumns();
+        var dividerColumns = this.input2.getColumns();
         var isInColumns = function(name, columnArray) {
           var data1 = name.split(".");
           return columnArray.reduce(function(r,x) {
@@ -91,4 +100,11 @@ function Division(input1, input2) {
         return "(" + this.input1.toLatex(options) + "\\div " + this.input2.toLatex(options) + ")";
     };
 }
-Division.prototype = new Relation();
+
+try {
+  var Relation = require('../js/relation.js');
+  Division.prototype = new Relation();
+  module.exports = Division;
+} catch(e) {
+  Division.prototype = new Relation();
+}

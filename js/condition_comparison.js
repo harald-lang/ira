@@ -59,4 +59,10 @@ function ConditionComparison(op, value1, value2) {
         return this.value1.toLatex(options) + this.opToLatex(this.op) + ' ' + this.value2.toLatex(options);
     };
 }
-ConditionComparison.prototype = new Condition();
+try {
+  var Condition = require('./condition.js');
+  ConditionComparison.prototype = new Condition();
+  module.exports = ConditionComparison;
+} catch (e) {
+  ConditionComparison.prototype = new Condition();
+}

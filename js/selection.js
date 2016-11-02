@@ -23,27 +23,26 @@ function Selection(condition, input) {
 
     this.getName = function() {
         return this.input.getName();
-    }
+    };
     this.setName = null;
 
     this.getColumns = function() {
         return this.input.getColumns();
-    }
+    };
     this.setColumns = null;
 
     this.getResult = function() {
         var rel = this.input.getResult();
         var cols = this.input.getColumns();
         var cond = this.condition.toJS();
-        if (cond == null) cond = true;
+        if (cond === null) cond = true;
         var result = [];
         var relname = this.input.getName();
 
         rel.each(function(row) {
-            var currentRow = new Object();
+            var currentRow = {};
             cols.each(function(name, nr) {
-                eval("currentRow." + name.gsub(".", "___") + " = " + row[nr].toJSON() + ";");
-                //eval("currentRow." + (relname + "." + name).gsub(".", "___") + " = " + row[nr].toJSON() + ";");
+              currentRow[name.gsub(".", "___")] = row[nr].toJSON();
             });
             if (eval(cond)) {
                 result.push(row);
@@ -51,20 +50,27 @@ function Selection(condition, input) {
         });
 
         return result;
-    }
+    };
 
     this.copy = function() {
         return new Selection(this.condition.copy(), this.input.copy());
-    }
+    };
 
     this.toHTML = function(options) {
         var display = '(' + latex("\\sigma");
         display += '<span style=\'font-size:10pt; vertical-align: bottom\'>' + this.condition.toHTML(options) + "</span> " + this.input.toHTML(options) + ")";
         return display;
-    }
+    };
 
     this.toLatex = function(options) {
         return "\\sigma_{" + this.condition.toLatex(options) + "}" + this.input.toLatex(options) + "";
-    }
+    };
 }
-Selection.prototype = new Relation();
+
+try {
+  var Relation = require('./relation.js');
+  Selection.prototype = new Relation();
+  module.exports = Selection;
+} catch(e) {
+  Selection.prototype = new Relation();
+}

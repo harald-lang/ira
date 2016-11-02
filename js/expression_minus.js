@@ -102,4 +102,12 @@ function Minus(input1, input2) {
         return "(" + this.input1.toLatex(options) + "\\setminus " + this.input2.toLatex(options) + ")";
     };
 }
-Minus.prototype = new Relation();
+
+try {
+  var Relation = require('../js/relation.js');
+  Minus.prototype = new Relation();
+  module.exports = Minus;
+} catch(e) {
+  console.log(e);
+  Minus.prototype = new Relation();
+}

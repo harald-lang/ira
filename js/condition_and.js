@@ -40,4 +40,11 @@ function ConditionAnd(cond1, cond2) {
         return '(' + this.cond1.toLatex(options) + '\\wedge ' + this.cond2.toLatex(options) + ')';
     }
 }
-ConditionAnd.prototype = new Condition;
+
+try {
+  var Condition = require('./condition.js');
+  ConditionAnd.prototype = new Condition();
+  module.exports = ConditionAnd;
+} catch (e) {
+  ConditionAnd.prototype = new Condition();
+}

@@ -25,12 +25,12 @@ function Crossproduct(input1, input2) {
         if (this.input1.getName() == this.input2.getName()) {
             throw "Beim Kreuzprodukt müssen die Relationen verschieden heißen!";
         }
-    }
+    };
 
     this.getName = function() {
         this.checkValidity();
         return this.input1.getName() + "_" + this.input2.getName();
-    }
+    };
     this.setName = null;
 
     this.getColumns = function() {
@@ -49,7 +49,7 @@ function Crossproduct(input1, input2) {
         });
 
         return newcols;
-    }
+    };
     this.setColumns = null;
 
     this.getResult = function() {
@@ -73,20 +73,27 @@ function Crossproduct(input1, input2) {
         });
 
         return result;
-    }
+    };
 
     this.copy = function() {
         return new Crossproduct(this.input1.copy(), this.input2.copy());
-    }
+    };
 
     this.toHTML = function(options) {
         var display = '';
         display += '(' + this.input1.toHTML(options) + " " + latex("\\times") + " " + this.input2.toHTML(options) + ")";
         return display;
-    }
+    };
 
     this.toLatex = function(options) {
         return "(" + this.input1.toLatex(options) + "\\times " + this.input2.toLatex(options) + ")";
-    }
+    };
 }
-Crossproduct.prototype = new Relation;
+
+try {
+  var Relation = require('../js/relation.js');
+  Crossproduct.prototype = new Relation();
+  module.exports = Crossproduct;
+} catch(e) {
+  Crossproduct.prototype = new Relation();
+}

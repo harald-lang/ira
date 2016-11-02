@@ -1,4 +1,4 @@
-IRA Interactive Relational Algebra Tool
+IRA Interactive Relational Algebra Tool [![Build Status](https://travis-ci.org/mathiasquintero/ira.svg?branch=master)](https://travis-ci.org/mathiasquintero/ira)
 =======================================
 
 This tool is live at http://www-db.in.tum.de/~muehe/ira/

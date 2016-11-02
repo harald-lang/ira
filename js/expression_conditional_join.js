@@ -46,14 +46,14 @@ function ConditionalJoin(condition, input1, input2) {
     this.getResult = function() {
         var cols = this.getColumns();
         var cond = this.condition.toJS();
-        if (cond == null) cond = true;
+        if (cond === null) cond = true;
         var result = [];
 
-        var cp = new Crossproduct(this.input1, this.input2)
+        var cp = new Crossproduct(this.input1, this.input2);
         var cross = cp.getResult();
 
         cross.each(function(row) {
-            var currentRow = new Object();
+            var currentRow = {};
             cols.each(function(name, nr) {
                 eval("currentRow." + name.gsub(".", "___") + " = " + row[nr].toJSON() + ";");
                 eval("currentRow." + cp.getColumns()[nr].gsub(".", "___") + " = " + row[nr].toJSON() + ";");
@@ -64,20 +64,20 @@ function ConditionalJoin(condition, input1, input2) {
         });
 
         return result;
-    }
+    };
 
     this.copy = function() {
         return new ConditionalJoin(this.condition.copy(), this.input1.copy(), this.input2.copy());
-    }
+    };
 
     this.toHTML = function(options) {
         var display = '';
         display += '(' + this.input1.toHTML(options) + " " + latex("\\bowtie") + "<span style='font-size:10pt; vertical-align: bottom'>" + this.condition.toHTML(options) + "</span> " + " " + this.input2.toHTML(options) + ")";
         return display;
-    }
+    };
 
     this.toLatex = function(options) {
         return "(" + this.input1.toLatex(options) + "\\bowtie_{" + this.condition.toLatex(options) + "} " + this.input2.toLatex(options) + ")";
-    }
+    };
 }
-ConditionalJoin.prototype = new Relation;
+ConditionalJoin.prototype = new Relation();

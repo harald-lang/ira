@@ -20,21 +20,28 @@ function Value() {
 
     this.copy = function() {
         return new Value();
-    }
+    };
 
     this.toJS = function() {
         return null;
         //throw "Der Ausdruck ist nicht vollständig definiert, es fehlt ein Wert.";
-    }
+    };
 
     this.toHTML = function(options) {
         var display = '<a id="block_' + this.blockId + '" class="block" href="javascript:;" ' +
         'onclick="editExpression(getBlock(' + this.blockId + '));">Wert</a> ';
         return display;
-    }
+    };
 
     this.toLatex = function(options) {
         return "?";
-    }
+    };
 }
-Value.prototype = new Block;
+
+try {
+  var Block = require('./block.js');
+  Value.prototype = new Block();
+  module.exports = Value;
+} catch(e) {
+  Value.prototype = new Block();
+}

@@ -25,19 +25,19 @@ function Projection(columns, input) {
 
     this.getColumnsParam = function() {
         return this.columns;
-    }
+    };
 
     this.setColumnsParam = function(col) {
         this.columns = col;
-    }
+    };
 
     this.getName = function() {
         return this.input.getName();
-    }
+    };
 
     this.getColumns = function() {
         return this.columns.split(",");
-    }
+    };
     this.setColumns = null;
 
     this.getResult = function() {
@@ -57,7 +57,7 @@ function Projection(columns, input) {
         });
         pcols = fixedcols;
 
-        var dupeMap = new Hash();
+        var dupeMap = {};
         // assemble result
         rel.each(function(row) {
             var newrow = [];
@@ -66,28 +66,34 @@ function Projection(columns, input) {
             });
 
             // do not add anything twice!
-            if (!dupeMap.get(newrow.toJSON())) {
+            if (!dupeMap[newrow.toJSON()]) {
                 result.push(newrow);
-                dupeMap.set(newrow.toJSON(), true);
+                dupeMap[newrow.toJSON()] = true;
             }
         });
 
         return result;
-    }
+    };
 
     this.copy = function() {
         return new Projection(this.columns, this.input.copy());
-    }
+    };
 
     this.toHTML = function(options) {
         var display = '(';
         display += latex("\\Pi");
         display += '<span style=\'font-size:10pt; vertical-align: bottom\'>' + this.columns + "</span> " + this.input.toHTML(options) + ")";
         return display;
-    }
+    };
 
     this.toLatex = function(options) {
         return "(\\Pi_{" + this.columns + "}" + this.input.toLatex(options) + ")";
-    }
+    };
 }
-Projection.prototype = new Relation;
+try {
+  var Relation = require('../js/relation.js');
+  Projection.prototype = new Relation();
+  module.exports = Projection;
+} catch(e) {
+  Projection.prototype = new Relation();
+}

@@ -15,6 +15,7 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 function Join(input1, input2) {
     this.leftOuter = false;
     this.rightOuter = false;
@@ -42,7 +43,7 @@ function Join(input1, input2) {
     };
 
     this.getColumns = function() {
-        var columns = this.input1.getColumns().clone();
+        var columns = this.input1.getColumns().slice(0);
         var isInJoin = function(c) {
           var data2 = c.split(".");
           return columns.reduce(function(r,n) {
@@ -65,6 +66,7 @@ function Join(input1, input2) {
 
         // find natural join columns
         var joincolumns = [];
+
         col1.each(function(c1) {
             var data1 = c1.split(".");
             col2.each(function(c2) {
@@ -82,7 +84,7 @@ function Join(input1, input2) {
         };
 
         // build result
-        var rights_added = new Hash();
+        var rights_added = {};
         var left_outer = this.leftOuter;
         rel1.each(function(row1) {
             var left_added = false;
@@ -95,7 +97,7 @@ function Join(input1, input2) {
                 });
 
                 if (good) {
-                    var newrow = row1.clone();
+                    var newrow = row1.slice(0);
                     col2.each(function(c, nr) {
                         if (!isInJoin(c)) {
                             newrow.push(row2[nr]);
@@ -103,14 +105,14 @@ function Join(input1, input2) {
                     });
                     result.push(newrow);
 
-                    rights_added.set(nr, true);
+                    rights_added[nr] = true;
                     left_added = true;
                 }
             });
 
             // left outer join addon
             if (left_outer && !left_added) {
-                var newrow = row1.clone();
+                var newrow = row1.slice(0);
                 for (i = 0; i < col2.length - joincolumns.length; i++) {
                     newrow.push(null);
                 }
@@ -122,7 +124,7 @@ function Join(input1, input2) {
 		var columns = this.getColumns();
         if (this.rightOuter) {
             rel2.each(function(row2, nr) {
-                if (!rights_added.get(nr)) {
+                if (!rights_added[nr]) {
                     var newrow = [];
 					// add left-hand columns
 					for (i = 0; i < col1.length; i++) {
@@ -166,4 +168,11 @@ function Join(input1, input2) {
         return "(" + this.input1.toLatex(options) + "\\bowtie " + this.input2.toLatex(options) + ")";
     };
 }
-Join.prototype = new Relation();
+
+try {
+  var Relation = require('../js/relation.js');
+  Join.prototype = new Relation();
+  module.exports = Join;
+} catch(e) {
+  Join.prototype = new Relation();
+}

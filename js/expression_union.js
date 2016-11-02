@@ -15,6 +15,7 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 function Union(input1, input2) {
     this.setChildren([input1, input2]);
 
@@ -22,7 +23,7 @@ function Union(input1, input2) {
     this.input2 = input2;
 
     this.validate = function() {
-      var leftInputColumns = this.input1.getColumns().clone().map(function(x) {
+      var leftInputColumns = this.input1.getColumns().map(function(x) {
         var data = x.split(".");
         return data[data.length-1];
       });
@@ -33,7 +34,7 @@ function Union(input1, input2) {
         if (leftInputColumns === null || rightInputColumns === null) {
             throw "Es fehlt mindestens eine Eingaberelation der Vereinigung.";
         }
-        
+
         leftInputColumns.each(function(c, nr) {
             if (c != rightInputColumns[nr]) {
                 throw "Die Spaltenzahl und Namen der zwei Eingaberelationen müssen für die Vereinigung gleich sein!";
@@ -58,7 +59,7 @@ function Union(input1, input2) {
         var rel1 = this.input1.getResult();
         var rel2 = this.input2.getResult();
         var col1 = this.input1.getColumns();
-        var result = rel1.clone();
+        var result = rel1;
 
         rel2.each(function(row2) {
             var dont_add = false;
@@ -97,4 +98,11 @@ function Union(input1, input2) {
         return "(" + this.input1.toLatex(options) + "\\cup " + this.input2.toLatex(options) + ")";
     };
 }
-Union.prototype = new Relation();
+
+try {
+  var Relation = require('../js/relation.js');
+  Union.prototype = new Relation();
+  module.exports = Union;
+} catch(e) {
+  Union.prototype = new Relation();
+}

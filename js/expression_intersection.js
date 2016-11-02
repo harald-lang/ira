@@ -39,4 +39,11 @@ function Intersection(input1, input2) {
         return "(" + this.input1.toLatex(options) + "\\cap " + this.input2.toLatex(options) + ")";
     };
 }
-Intersection.prototype = new Minus();
+
+try {
+  var Minus = require('./expression_minus.js');
+  Intersection.prototype = new Minus();
+  module.exports = Intersection;
+} catch(e) {
+  Intersection.prototype = new Minus();
+}
